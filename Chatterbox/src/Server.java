@@ -31,7 +31,7 @@ public class Server {
 
       server = serverSocket.accept();
 
-      printWelcome();
+      printConnectionDetail();
 
       // start listening for streams
       isRunning = true;
@@ -42,17 +42,15 @@ public class Server {
 
       while (isRunning) {
         String inputString = in.readUTF();
-
-        out.writeUTF(inputString); // response to Client
+        System.out.println(inputString); // local log
 
         if (inputString.equals("quit")) {
+          out.writeUTF("bye");
           isRunning = false;
         } else {
-          System.out.println(inputString); // local log
+          out.writeUTF(inputString); // response to Client
         }
-
       }
-
 
       server.close();
 
@@ -61,7 +59,7 @@ public class Server {
     }
   }
 
-  private void printWelcome() {
+  private void printConnectionDetail() {
     System.out.println("accepted connection from : " + server.getLocalAddress() + ", port: " + server.getPort());
   }
 }

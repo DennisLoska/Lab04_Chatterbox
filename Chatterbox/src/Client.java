@@ -2,7 +2,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.Scanner;
 
 public class Client extends Thread {
@@ -22,27 +21,31 @@ public class Client extends Thread {
   }
 
   public void run() {
-
+    System.out.println("Establishing connection to Server. hold tight...");
     try {
       client = new Socket("localhost", 8080);
+      System.out.println("Successfully connected. " + client + "\n---------------------------------");
 
+      // init socket streams
       in = new DataInputStream(client.getInputStream());
       out = new DataOutputStream(client.getOutputStream());
+      System.out.println(in.readUTF()); // Server welcome message
 
       Scanner sc = new Scanner(System.in);
 
       while (!client.isClosed()) {
-        System.out.println(in.readUTF()); // Server messages
         System.out.print("> ");
         String input = sc.nextLine();
         out.writeUTF(input); // send to Socket
         //System.out.println("response: " + input + "\n"); // local echo
+        System.out.println(in.readUTF()); // print Server response
+        if (input.equals("quit")) {
+          break;
+        }
       }
 
       client.close();
 
-    } catch (UnknownHostException e) {
-      e.printStackTrace();
     } catch (IOException e) {
       e.printStackTrace();
     }
