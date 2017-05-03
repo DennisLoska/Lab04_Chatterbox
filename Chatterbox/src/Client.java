@@ -29,25 +29,29 @@ public class Client extends Thread {
       // init socket streams
       in = new DataInputStream(client.getInputStream());
       out = new DataOutputStream(client.getOutputStream());
-      System.out.println(in.readUTF()); // Server welcome message
+
+      Listener listener = new Listener(in);
+      listener.start(); // background thread
 
       Scanner sc = new Scanner(System.in);
 
       while (!client.isClosed()) {
-        System.out.print("> ");
+        //System.out.print("> ");
         String input = sc.nextLine();
         out.writeUTF(input); // send to Socket
-        //System.out.println("response: " + input + "\n"); // local echo
-        System.out.println(in.readUTF()); // print Server response
         if (input.equals("quit")) {
           break;
         }
       }
-
+      listener.interrupt();
       client.close();
 
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+  public void quit() {
+
   }
 }

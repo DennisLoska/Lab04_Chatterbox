@@ -27,8 +27,6 @@ public class Server {
     try {
       serverSocket = new ServerSocket(8080);
       serverSocket.setSoTimeout(20000);
-
-
       server = serverSocket.accept();
 
       printConnectionDetail();
