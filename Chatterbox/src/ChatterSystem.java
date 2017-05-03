@@ -1,10 +1,10 @@
 import java.io.IOException;
 
 /**
- * Created by Dennis on 02.05.2017.
+ * ChatterSystem
+ * should launch Server & test Client by default
  */
 public class ChatterSystem {
-
 
   public static void main(String[] args) throws IOException {
     ChatterSystem cs = new ChatterSystem();
@@ -20,6 +20,4 @@ public class ChatterSystem {
       System.out.println("waiting for input");
     }
   }
-
-
 }

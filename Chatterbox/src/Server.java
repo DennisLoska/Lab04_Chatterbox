@@ -5,11 +5,11 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server {
+  public boolean isRunning;
   private ServerSocket serverSocket;
   private Socket server;
   private DataInputStream in;
   private DataOutputStream out;
-  public boolean isRunning;
 
   public Server() {
 
@@ -33,24 +33,22 @@ public class Server {
 
       printWelcome();
 
-
-      // Code
+      // start listening for streams
       isRunning = true;
       in = new DataInputStream(server.getInputStream());
       out = new DataOutputStream(server.getOutputStream());
 
-      //output.writeUTF("Hallo");
+      out.writeUTF("Hello there, this is the Server !");
 
       while (isRunning) {
         String inputString = in.readUTF();
 
-        out.writeUTF(inputString);
-        //sendToClients( inputString );
+        out.writeUTF(inputString); // response to Client
 
         if (inputString.equals("quit")) {
           isRunning = false;
         } else {
-          System.out.println(inputString);
+          System.out.println(inputString); // local log
         }
 
       }

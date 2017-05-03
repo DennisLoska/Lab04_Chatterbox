@@ -10,10 +10,10 @@ public class Client extends Thread {
   private Socket client;
   private DataInputStream in;
   private DataOutputStream out;
-  //public static int id = 0;
+  public static int id = 0;
 
   public Client() {
-    //id++;
+    id++;
   }
 
   public static void main(String[] args) {
@@ -32,11 +32,11 @@ public class Client extends Thread {
       Scanner sc = new Scanner(System.in);
 
       while (!client.isClosed()) {
-        System.out.println("Chatbot: say something..");
+        System.out.println(in.readUTF()); // Server messages
         System.out.print("> ");
-        //System.out.println(in.readUTF()); // funktioniert nicht
-        //out.writeUTF(scanner.nextLine());
-        System.out.println("response: " + sc.nextLine() + "\n");
+        String input = sc.nextLine();
+        out.writeUTF(input); // send to Socket
+        //System.out.println("response: " + input + "\n"); // local echo
       }
 
       client.close();
