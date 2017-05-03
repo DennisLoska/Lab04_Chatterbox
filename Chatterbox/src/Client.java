@@ -44,10 +44,18 @@ public class Client extends Thread {
         }
       }
       listener.interrupt();
+      synchronized (listener) {
+        try {
+          listener.wait(); // waiting for background listener to stop
+          System.out.println("\nDONE");
+        } catch (InterruptedException ie) {
+          System.out.println("\nFAILED\n" + ie);
+        }
+      }
       client.close();
 
-    } catch (IOException e) {
-      e.printStackTrace();
+    } catch (IOException ioe) {
+      ioe.printStackTrace();
     }
   }
 
