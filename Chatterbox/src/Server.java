@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.util.Scanner;
 
 public class Server implements Runnable {
   private boolean isRunning;
@@ -40,10 +41,11 @@ public class Server implements Runnable {
         open();
         isRunning = true;
         out.writeUTF("Hello there, this is the Server !");
+        Scanner sc = new Scanner(System.in);
         while (isRunning) {
           String inputString = in.readUTF();
           System.out.println(inputString); // local log
-          out.writeUTF(inputString); // echo response to client
+          out.writeUTF(sc.nextLine()); // echo response to client
           if (inputString.equals("quit")) isRunning = false;
         }
         close();
