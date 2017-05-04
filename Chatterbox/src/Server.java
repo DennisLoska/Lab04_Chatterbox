@@ -12,12 +12,13 @@ public class Server implements Runnable {
   private DataInputStream in;
   private DataOutputStream out;
   private Thread thread;
-  private static int timeout = 20000;
+  private static final int timeout = 20000;
 
   public Server(int port) {
     try {
       serverSocket = new ServerSocket(port);
-      serverSocket.setSoTimeout(timeout);
+      if (timeout > 0)
+        serverSocket.setSoTimeout(timeout);
       System.out.println("Server running on port " + port);
       start();
     } catch (IOException ioe) {
@@ -88,36 +89,6 @@ public class Server implements Runnable {
       ioe.printStackTrace();
     }
   }
-
-  /* public void start() {
-    try {
-      // start listening for streams
-      isRunning = true;
-      in = new DataInputStream(server.getInputStream());
-      out = new DataOutputStream(server.getOutputStream());
-
-      out.writeUTF("Hello there, this is the Server !");
-
-      Listener listener = new Listener(in);
-
-      while (isRunning) {
-        String inputString = in.readUTF();
-        System.out.println(inputString); // local log
-
-        if (inputString.equals("quit")) {
-          out.writeUTF("bye");
-          isRunning = false;
-        } else {
-          out.writeUTF(inputString); // response to Client
-        }
-      }
-
-      server.close();
-
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-  } */
 
   private void printConnectionDetail() {
     System.out.println("accepted connection from : " + server.getLocalAddress() + ", port: " + server.getPort());
