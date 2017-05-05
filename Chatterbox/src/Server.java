@@ -13,6 +13,7 @@ public class Server implements Runnable {
   private DataInputStream in;
   private DataOutputStream out;
   private Thread thread;
+  private Listener listener;
   private static final int timeout = 20000;
 
   public Server(int port) {
@@ -43,10 +44,7 @@ public class Server implements Runnable {
         out.writeUTF("Hello there, this is the Server !");
         Scanner sc = new Scanner(System.in);
         while (isRunning) {
-          String inputString = in.readUTF();
-          System.out.println(inputString); // local log
-          out.writeUTF(sc.nextLine()); // echo response to client
-          if (inputString.equals("quit")) isRunning = false;
+          out.writeUTF(sc.nextLine()); // wait for user input as response to client
         }
         close();
       } catch (SocketTimeoutException ste) {
@@ -76,6 +74,8 @@ public class Server implements Runnable {
   public void open() {
     try {
       in = new DataInputStream(server.getInputStream());
+      listener = new Listener(in);
+      listener.start();
       out = new DataOutputStream(server.getOutputStream());
     } catch (IOException ioe) {
       ioe.printStackTrace();
@@ -84,6 +84,15 @@ public class Server implements Runnable {
 
   public void close() {
     try {
+      listener.interrupt();
+      synchronized (listener) {
+        try {
+          listener.wait(); // waiting for background listener to stop
+          System.out.println("\nDONE");
+        } catch (InterruptedException ie) {
+          System.out.println("\nFAILED\n" + ie);
+        }
+      }
       in.close();
       out.close();
       server.close();
