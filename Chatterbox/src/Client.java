@@ -40,7 +40,8 @@ public class Client extends Thread {
         String input = sc.nextLine();
         out.writeUTF(input); // send to Socket
         if (input.equals("quit")) {
-          break;
+          client.close();
+          System.exit(0);
         }
       }
       listener.interrupt();

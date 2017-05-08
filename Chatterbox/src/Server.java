@@ -43,7 +43,7 @@ public class Server implements Runnable {
         isRunning = true;
         out.writeUTF("Hello there, this is the Server !");
         Scanner sc = new Scanner(System.in);
-        while (isRunning) {
+        while (!serverSocket.isClosed()) {
           out.writeUTF(sc.nextLine()); // wait for user input as response to client
         }
         close();
@@ -95,9 +95,8 @@ public class Server implements Runnable {
       }
       in.close();
       out.close();
-      server.close();
-    } catch (IOException ioe) {
-      ioe.printStackTrace();
+    } catch (Exception e) {
+      e.printStackTrace();
     }
   }
 

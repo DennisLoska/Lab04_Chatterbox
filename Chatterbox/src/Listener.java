@@ -14,7 +14,7 @@ public class Listener extends Thread {
 
   @Override
   public void run() {
-    while (inputStream != null && !Thread.currentThread().isInterrupted()) {
+    while (inputStream != null || !Thread.currentThread().isInterrupted()) {
       try {
         try {
           System.out.println(inputStream.readUTF()); // receives & prints Server messages
